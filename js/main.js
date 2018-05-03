@@ -8,6 +8,7 @@ $(document).ready(function () {
 });
 
 function newgame() {
+    $("#gameover").remove();
     //初始化棋盘格
     init();
     //生成两个随机位置的随机数组

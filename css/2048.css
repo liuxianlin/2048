@@ -9,7 +9,7 @@ header h1{
     font-size: 40px;
     font-weight: bold;
 }
-#Newgamebutton{
+#Newgamebutton,#restgamebutton{
     display: block;
     margin: 20px auto;
     width: 100px;

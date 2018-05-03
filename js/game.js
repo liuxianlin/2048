@@ -58,15 +58,15 @@ function moveLeft() {
                         showMoveAnimation(i, j, i, k);
                         //add
                         board[i][k] += board[i][j];
-                        score += board[i][k];
                         board[i][j] = 0;
+                        score += board[i][k]; //add 分数
                         updateScore(score);
                     }
                 }
             }
         }
     }
-    updateNumber();
+    setTimeout("updateNumber()", 200);
     return true;
 }
 
@@ -75,9 +75,9 @@ function moveRight() {
         return false;
     }
     for (var i = 0; i < n; i++) {
-        for (var j = 0; j < n; j++) {
+        for (var j = n - 2; j >= 0; j--) {
             if (board[i][j] != 0) {
-                for (var k = j + 1; k < n; k++) {
+                for (var k = n - 1; k > j; k--) {
                     if (board[i][k] == 0 && noNumberRow(i, j, k, board)) { //与向左   顺序不一致
                         showMoveAnimation(i, j, i, k);
                         board[i][k] = board[i][j];
@@ -93,7 +93,7 @@ function moveRight() {
             }
         }
     }
-    updateNumber();
+    setTimeout("updateNumber()", 200);
     return true;
 }
 
@@ -101,16 +101,16 @@ function moveUp() {
     if (!canMoveUp(board)) {
         return false;
     }
-    for (var i = 0; i < n; i++) {
+    for (var i = 1; i < n; i++) {
         for (var j = 0; j < n; j++) {
             if (board[i][j] != 0) {
                 for (var k = 0; k < i; k++) {
                     if (board[k][j] == 0 && noNumberCol(k, i, j, board)) {
-                        showMoveAnimation(i, j, i, k);
+                        showMoveAnimation(i, j, k, j);
                         board[k][j] = board[i][j];
                         board[i][j] = 0;
                     } else if (board[k][j] == board[i][j] && noNumberCol(k, i, j, board)) {
-                        showMoveAnimation(i, j, i, k);
+                        showMoveAnimation(i, j, k, j);
                         board[k][j] += board[i][j];
                         score += board[k][j];
                         board[i][j] = 0;
@@ -121,7 +121,7 @@ function moveUp() {
             }
         }
     }
-    updateNumber();
+    setTimeout("updateNumber()", 200);
     return true;
 }
 
@@ -129,26 +129,26 @@ function moveDown() {
     if (!canMoveDown(board)) {
         return false;
     }
-    for (var i = 0; i < n; i++) {
+    for (var i = n - 2; i >= 0; i--) { //第三行才能移 编号从0 开始
         for (var j = 0; j < n; j++) {
             if (board[i][j] != 0) {
-                for (var k = i + 1; k < n; k++) {
+                for (var k = n - 1; k > i; k--) {
                     if (board[k][j] == 0 && noNumberCol(i, k, j, board)) {
-                        showMoveAnimation(i, j, i, k);
+                        showMoveAnimation(i, j, k, j);
                         board[k][j] = board[i][j];
                         board[i][j] = 0;
                     } else if (board[k][j] == board[i][j] && noNumberCol(i, k, j, board)) {
-                        showMoveAnimation(i, j, i, k);
+                        showMoveAnimation(i, j, k, j);
                         board[k][j] += board[i][j];
+                        board[i][j] = 0;
                         score += board[k][j];
                         updateScore(score);
-                        board[i][j] = 0;
                     }
                 }
             }
         }
     }
-    updateNumber();
+    setTimeout("updateNumber()", 200);
     return true;
 }
 
@@ -163,8 +163,28 @@ function isgameOver() {
 }
 
 function gameOver() {
-    var txt=confirm("game over!\n点击确认重新游戏?");
-    if(txt==true){
+    // var txt = confirm("game over!\n点击确认重新游戏?");
+
+    // if (txt == true) {
+    //     newgame();
+    // }
+    $("#mainc").append("<div class='gameover' id='gameover'><p>您的分数是：</p><span>" + score + "</span><br><button id='restgamebutton' >重新开始</button></div>");
+    $("#gameover").css({
+        "width": "500px",
+        "height": "500px",
+        "background-color": "rgba(0,0,0,0.5)",
+        "position":"absolute",
+        "top":"-5px",
+        "left":"-4px",
+        "font-size":"32px",
+        "text-align":"center",
+        "z-index":"999",
+        "color":"white"
+
+    });
+    $("#restgamebutton").click(function () {
+        $("#gameover").remove();
+        updateScore(0);
         newgame();
-    }    
+    });
 }
